@@ -38,11 +38,8 @@ io.on('connection', (socket) => {
 
 
     socket.on('update_location', async (locationData) => {
-        console.log('updating location', locationData)
-
         const { userId } = locationData
-
-
+        
         await LocationModel.findOneAndUpdate(
             { userId },
             locationData,
