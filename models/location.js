@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const LocationSchema = new mongoose.Schema({
     userId: String,
-    latitude: Number,
-    longitude: Number,
+    latitude: String,
+    longitude: String,
     timestamp: Date
   });
   
