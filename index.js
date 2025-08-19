@@ -63,22 +63,18 @@ io.on('connection', (socket) => {
         console.log(cipheredData)
         socket.broadcast.emit('location_update', cipheredData)
 
-        if (!record) {
-            await LocationModel.findOneAndUpdate(
-                { userId },
-                cipheredData,
-                { upsert: true }
-            )
-            return
-        }
-        console.log("Saving multiple record")
-        const locationRecord = {
-            ...cipheredData,
-            userId,
-            plate
-        }
-        res = await LocationModel.create(locationRecord)
-        console.log(res)
+        await LocationModel.findOneAndUpdate(
+            { userId },
+            cipheredData,
+            { upsert: true }
+        )
+        // console.log("Saving multiple record")
+        // const locationRecord = {
+        //     ...cipheredData,
+        //     userId,
+        //     plate
+        // }
+        if (record) await LocationModel.create({...locationData, ml: true})
     })
 
 
