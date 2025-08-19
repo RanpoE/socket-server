@@ -28,7 +28,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'development';
 // Utility function
 const encryptField = (value) => {
     return CryptoJS.AES.encrypt(value.toString(), SECRET_KEY).toString();
-  };
+};
 
 
 const decrypt = (value) => {
@@ -52,8 +52,8 @@ io.on('connection', (socket) => {
 
 
     socket.on('update_location', async (locationData) => {
-        const { userId, latitude, longitude } = locationData
-        
+        const { userId, latitude, longitude, record } = locationData
+
         const cipheredData = {
             ...locationData,
             latitude: encryptField(latitude),
@@ -61,12 +61,24 @@ io.on('connection', (socket) => {
         }
 
         console.log(cipheredData)
-        await LocationModel.findOneAndUpdate(
-            { userId },
-            cipheredData,
-            { upsert: true }
-        )
         socket.broadcast.emit('location_update', cipheredData)
+
+        if (!record) {
+            await LocationModel.findOneAndUpdate(
+                { userId },
+                cipheredData,
+                { upsert: true }
+            )
+            return
+        }
+        console.log("Saving multiple record")
+        const locationRecord = {
+            ...cipheredData,
+            userId,
+            plate: 'XCD-432'
+        }
+        res = await LocationModel.create(locationRecord)
+        console.log(res)
     })
 
 
