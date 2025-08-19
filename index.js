@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 
 
     socket.on('update_location', async (locationData) => {
-        const { userId, latitude, longitude, record } = locationData
+        const { userId, latitude, longitude, record, plate } = locationData
 
         const cipheredData = {
             ...locationData,
@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
         const locationRecord = {
             ...cipheredData,
             userId,
-            plate: 'XCD-432'
+            plate
         }
         res = await LocationModel.create(locationRecord)
         console.log(res)
