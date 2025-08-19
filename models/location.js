@@ -5,7 +5,8 @@ const LocationSchema = new mongoose.Schema({
   latitude: String,
   longitude: String,
   timestamp: Date,
-  plate: { type: String }
+  plate: { type: String },
+  ml: { type: Boolean},
 });
 
 const LocationModel = mongoose.model('Location', LocationSchema);
